@@ -9,7 +9,7 @@ try {
   const producer = new Producer(client);
 
   let catCount = 0;
-  let dogCount = 0;å
+  let dogCount = 0;
 
   producer.on("ready", function() {
     console.log("ready");
