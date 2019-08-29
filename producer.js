@@ -7,37 +7,50 @@ try {
   const Producer = kafka.Producer;
   const client = new kafka.KafkaClient(config.kafka_server);
   const producer = new Producer(client);
-  const kafka_topic = 'example';
-  console.log(kafka_topic);
-  let payloads = [
-    {
-      topic: kafka_topic,
-      messages: config.kafka_topic
-    }
-  ];
 
-
-  let count = 0;
+  let catCount = 0;
+  let dogCount = 0;å
 
   producer.on("ready", function() {
     console.log("ready");
+
+
     setInterval(function() {
-      payloads = [
-        { topic: kafka_topic, messages: `I have ${count} cats`, partition: 0 }
+      let payloads = [
+        { topic: config.kafka_topic, messages: `I have ${catCount} cats`, partition: 0 }
       ];
 
       producer.send(payloads, function(err, data) {
         console.log(data);
-        count += 1;
+        catCount += 1;
       });
     }, 5000);
+
+    setInterval(function() {
+      let payloads = [
+        { topic: config.kafka_topic2, messages: `I have ${dogCount} dogs`, partition: 0 }
+      ];
+
+      producer.send(payloads, function(err, data) {
+        console.log(data);
+        dogCount += 1;
+      });
+    }, 5000);
+
+
+
   });
+
+
+
+
 
   producer.on('error', function(err) {
     console.log(err);
-    console.log('[kafka-producer -> '+kafka_topic+']: connection errored');
+    console.log('[kafka-producer -> '+config.kafka_topic+']: connection errored');
     throw err;
   });
+
 }
 catch(e) {
   console.log(e);
